@@ -1,5 +1,5 @@
 #include "riscv_cv.hpp"
-#include "reference_cv.hpp"
+// #include "reference_cv.hpp"
 
 #ifndef RISCV_QEMU
 #include "image0.hpp"
@@ -27,7 +27,7 @@ int main()
     Timer timer;
 
     timer.Start();
-    ref::RGP2Grey(image0, out);
+    vec::RGP2Grey(image0, out);
     timer.Stop();
 
     printf("Time: %llu cycles, %llu instructions\n",
@@ -36,7 +36,7 @@ int main()
 
     // Write output
 #ifdef RISCV_QEMU
-    out.Write("/home/mina/RISCV_Academy/images/output_grey.pgm");
+    out.Write("/home/mina/RISCV_Academy/images/output_grey_vec.pgm");
     printf("Wrote output.pgm (%dx%d)\n", out.Width(), out.Height());
 #endif
 

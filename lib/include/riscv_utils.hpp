@@ -59,16 +59,26 @@ public:
         return static_cast<T>(min_ + (rand() % span_));
     }
 
-    void ImageRandomInitialize(Image<T>& image)
+template <ImageType Type = ImageType::GRAY>
+void ImageRandomInitialize(Image<T, Type>& image)
+{
+    for (int y = 0; y < image.Height(); y++)
     {
-        for (int y = 0; y < image.Height(); y++)
+        for (int x = 0; x < image.Width(); x++)
         {
-            for (int x = 0; x < image.Width(); x++)
+            if constexpr (Type == ImageType::RGB)
+            {
+                image.SetPixel(x, y, get(), 0);
+                image.SetPixel(x, y, get(), 1);
+                image.SetPixel(x, y, get(), 2);
+            }
+            else
             {
                 image.SetPixel(x, y, get());
             }
         }
     }
+}
 
 private:
     int min_;
