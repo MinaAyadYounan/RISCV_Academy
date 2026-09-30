@@ -1,6 +1,6 @@
-#include "image_RGB2Grey.hpp"
+#include "image_RGB2Gray.hpp"
 
-void ref::RGB2Grey(const Image<uint8_t, ImageType::RGB> &input1, 
+void ref::RGB2Gray(const Image<uint8_t, ImageType::RGB> &input1, 
                          Image<uint8_t, ImageType::GRAY> &output)
 {
 

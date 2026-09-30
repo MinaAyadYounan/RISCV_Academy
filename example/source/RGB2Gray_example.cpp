@@ -27,7 +27,7 @@ int main()
     Timer timer;
 
     timer.Start();
-    ref::RGB2Grey(image0, out);
+    ref::RGB2Gray(image0, out);
     timer.Stop();
 
     printf("Time: %llu cycles, %llu instructions\n",

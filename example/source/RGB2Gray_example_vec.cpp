@@ -27,7 +27,7 @@ int main()
     Timer timer;
 
     timer.Start();
-    vec::RGB2Grey(image0, out);
+    vec::RGB2Gray(image0, out);
     timer.Stop();
 
     printf("Time: %llu cycles, %llu instructions\n",
@@ -37,7 +37,7 @@ int main()
     // Write output
 #ifdef RISCV_QEMU
     out.Write("/home/mina/RISCV_Academy/images/output_grey_vec.pgm");
-    printf("Wrote output.pgm (%dx%d)\n", out.Width(), out.Height());
+    printf("Wrote output_grey_vec.pgm (%dx%d)\n", out.Width(), out.Height());
 #endif
 
     printf("Example passed.\n");
