@@ -16,15 +16,15 @@ void vec::RGB2Gray(const Image<uint8_t, ImageType::RGB>& input,
     constexpr uint8_t g_coeff_q8 = static_cast<uint8_t>(mult_factor * g_coeff + 0.5f); // 150
     constexpr uint8_t b_coeff_q8 = static_cast<uint8_t>(mult_factor * b_coeff + 0.5f); // 29
 
-    const uint8_t* __restrict__ in_ptr  = input.GetPtr(0, 0);
-    uint8_t*       __restrict__ out_ptr = output.GetPtr(0, 0);
+    const uint8_t* in_ptr  = input.GetPtr(0, 0);
+    uint8_t*       out_ptr = output.GetPtr(0, 0);
 
     const size_t total_pixels = input.Width() * input.Height();
-    const uint8_t* const out_end = out_ptr + total_pixels;
     const size_t vlmax = __riscv_vsetvlmax_e8m2();
+    size_t i = 0;
 
     // 2x Unrolled Main Loop (LMUL=2): processes 2 * vlmax (64 pixels) per iteration
-    for (; out_ptr + 2 * vlmax <= out_end; )
+    for (; i + 2 * vlmax <= total_pixels; i += 2 * vlmax)
     {
         // 1. Load two consecutive vector chunks (64 pixels = 192 bytes)
         const vuint8m2x3_t RGB_A = __riscv_vlseg3e8_v_u8m2x3(in_ptr, vlmax);
@@ -58,9 +58,9 @@ void vec::RGB2Gray(const Image<uint8_t, ImageType::RGB>& input,
 
     // Tail Loop: handles any remaining pixels (< 2 * vlmax)
     size_t vl = 0;
-    for (; out_ptr < out_end; out_ptr += vl, in_ptr += vl * 3)
+    for (; i < total_pixels; i += vl)
     {
-        vl = __riscv_vsetvl_e8m2(out_end - out_ptr);
+        vl = __riscv_vsetvl_e8m2(total_pixels - i);
 
         const vuint8m2x3_t RGB = __riscv_vlseg3e8_v_u8m2x3(in_ptr, vl);
         const vuint8m2_t R = __riscv_vget_v_u8m2x3_u8m2(RGB, 0);
@@ -73,5 +73,8 @@ void vec::RGB2Gray(const Image<uint8_t, ImageType::RGB>& input,
 
         const vuint8m2_t gray = __riscv_vnsrl_wx_u8m2(acc, frac_bits, vl);
         __riscv_vse8_v_u8m2(out_ptr, gray, vl);
+
+        in_ptr  += vl * 3;
+        out_ptr += vl;
     }
 }
