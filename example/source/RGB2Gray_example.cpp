@@ -21,7 +21,7 @@ int main()
     image0.Read(image0_width, image0_height, image0_data);
 #endif
 
-    // Add with saturation
+    // Convert RGB to grayscale
     Image<uint8_t> out(image0.Width(), image0.Height());
 
     Timer timer;
@@ -36,8 +36,8 @@ int main()
 
     // Write output
 #ifdef RISCV_QEMU
-    out.Write("/home/mina/RISCV_Academy/images/output_grey.pgm");
-    printf("Wrote output.pgm (%dx%d)\n", out.Width(), out.Height());
+    out.Write("/home/mina/RISCV_Academy/images/output_gray.pgm");
+    printf("Wrote output_gray.pgm (%dx%d)\n", out.Width(), out.Height());
 #endif
 
     printf("Example passed.\n");
