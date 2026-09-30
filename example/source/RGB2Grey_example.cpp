@@ -12,7 +12,7 @@ int main()
     riscv_enable_vector();
 #endif
 
-    // Read two input images
+    // Read input image
     Image<uint8_t, ImageType::RGB> image0;
 
 #ifdef RISCV_QEMU
@@ -27,7 +27,7 @@ int main()
     Timer timer;
 
     timer.Start();
-    ref::RGP2Grey(image0, out);
+    ref::RGB2Grey(image0, out);
     timer.Stop();
 
     printf("Time: %llu cycles, %llu instructions\n",
