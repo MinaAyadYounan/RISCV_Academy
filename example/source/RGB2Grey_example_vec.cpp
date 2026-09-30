@@ -27,7 +27,7 @@ int main()
     Timer timer;
 
     timer.Start();
-    vec::RGP2Grey(image0, out);
+    vec::RGB2Grey(image0, out);
     timer.Stop();
 
     printf("Time: %llu cycles, %llu instructions\n",

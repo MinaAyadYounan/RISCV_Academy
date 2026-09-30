@@ -1,8 +1,8 @@
 
-#include "image_RGP2Grey.hpp"
+#include "image_RGB2Grey.hpp"
 #include <riscv_vector.h>
 
-static void RGP2Grey_loop(const uint8_t* in0, 
+static void RGB2Grey_loop(const uint8_t* in0, 
                            uint8_t* out,
                      const size_t width, 
                      const size_t height)
@@ -28,8 +28,8 @@ static void RGP2Grey_loop(const uint8_t* in0,
             const vuint16m8_t B_weighted  = __riscv_vwmulu_vx_u16m8(B, B_val, vl);
                        
             const vuint16m8_t RG_sum      = __riscv_vadd_vv_u16m8(R_weighted, G_weighted, vl);
-            const vuint16m8_t RGP_avg     = __riscv_vadd_vv_u16m8(RG_sum, B_weighted, vl);
-            const  vuint8m4_t Grey_result =	__riscv_vnsrl_wx_u8m4(RGP_avg, 8, vl);
+            const vuint16m8_t RGB_avg     = __riscv_vadd_vv_u16m8(RG_sum, B_weighted, vl);
+            const  vuint8m4_t Grey_result =	__riscv_vnsrl_wx_u8m4(RGB_avg, 8, vl);
             __riscv_vse8_v_u8m4(&row_out[x], Grey_result, vl); 
                     
         }
@@ -37,14 +37,14 @@ static void RGP2Grey_loop(const uint8_t* in0,
 }
 
 
-void vec::RGP2Grey(const Image<uint8_t, ImageType::RGB>& input, 
+void vec::RGB2Grey(const Image<uint8_t, ImageType::RGB>& input, 
                 Image<uint8_t, ImageType::GRAY>& output)
 {
     const uint8_t* in0 = input.GetPtr(0, 0);
     uint8_t* out = output.GetPtr(0, 0);
     const size_t width = input.Width();
     const size_t height = input.Height();
-    RGP2Grey_loop(in0, out, width, height);
+    RGB2Grey_loop(in0, out, width, height);
    
 }
 

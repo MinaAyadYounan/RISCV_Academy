@@ -14,7 +14,7 @@ int main()
     const int height = 100;
     const int loop_count = 3;
 
-    printf("RGP to Grey benchmark: %dx%d, %d iterations\n", width, height, loop_count);
+    printf("RGB to Grey benchmark: %dx%d, %d iterations\n", width, height, loop_count);
 
     Image<uint8_t, ImageType::RGB>input0(width, height);
 
@@ -34,11 +34,11 @@ int main()
             Timer timer_scalar, timer_vectorized;
 
             timer_scalar.Start();
-            ref::RGP2Grey(input0, output_reference);
+            ref::RGB2Grey(input0, output_reference);
             timer_scalar.Stop();
 
             timer_vectorized.Start();
-            vec::RGP2Grey(input0,output_vectorized);
+            vec::RGB2Grey(input0,output_vectorized);
             timer_vectorized.Stop();
             reference_cycles += timer_scalar.ElapsedCycles();
             reference_instrs += timer_scalar.ElapsedInstructions();
@@ -52,7 +52,7 @@ int main()
                 break;
             }
         }
-        PrintTime("RGP2Grey", width * height,
+        PrintTime("RGB2Grey", width * height,
                   vectorized_cycles / loop_count, vectorized_instrs / loop_count,
                   reference_cycles / loop_count, reference_instrs / loop_count);
     if (all_correct)

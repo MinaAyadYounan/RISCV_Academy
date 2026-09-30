@@ -11,9 +11,9 @@ void ref::RGB2Grey(const Image<uint8_t, ImageType::RGB> &input1,
     // Fixed-point Q0.8 coefficients (8 fractional bits).
     constexpr int frac_bits = 8;
     constexpr int mult_factor = 1 << frac_bits;
-    constexpr uint16_t r_coeff_q8 = static_cast<uint16_t>(mult_factor * r_coeff);
-    constexpr uint16_t g_coeff_q8 = static_cast<uint16_t>(mult_factor * g_coeff);
-    constexpr uint16_t b_coeff_q8 = static_cast<uint16_t>(mult_factor * b_coeff);
+    constexpr uint16_t r_coeff_q8 = static_cast<uint16_t>(mult_factor * r_coeff + 0.5f);
+    constexpr uint16_t g_coeff_q8 = static_cast<uint16_t>(mult_factor * g_coeff + 0.5f);
+    constexpr uint16_t b_coeff_q8 = static_cast<uint16_t>(mult_factor * b_coeff + 0.5f);
     for (int y = 0; y < input1.Height(); y++)
     {
         for (int x = 0; x < input1.Width(); x++)
