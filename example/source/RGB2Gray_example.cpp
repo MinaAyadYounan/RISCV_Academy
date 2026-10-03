@@ -12,7 +12,7 @@ int main()
     riscv_enable_vector();
 #endif
 
-    // Read two input images
+    // Read input image
     Image<uint8_t, ImageType::RGB> image0;
 
 #ifdef RISCV_QEMU
@@ -21,13 +21,13 @@ int main()
     image0.Read(image0_width, image0_height, image0_data);
 #endif
 
-    // Add with saturation
+    // Convert RGB to grayscale
     Image<uint8_t> out(image0.Width(), image0.Height());
 
     Timer timer;
 
     timer.Start();
-    ref::RGP2Grey(image0, out);
+    ref::RGB2Gray(image0, out);
     timer.Stop();
 
     printf("Time: %llu cycles, %llu instructions\n",
@@ -36,8 +36,8 @@ int main()
 
     // Write output
 #ifdef RISCV_QEMU
-    out.Write("/home/mina/RISCV_Academy/images/output_grey.pgm");
-    printf("Wrote output.pgm (%dx%d)\n", out.Width(), out.Height());
+    out.Write("/home/mina/RISCV_Academy/images/output_gray.pgm");
+    printf("Wrote output_gray.pgm (%dx%d)\n", out.Width(), out.Height());
 #endif
 
     printf("Example passed.\n");
