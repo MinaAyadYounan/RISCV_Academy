@@ -4,3 +4,4 @@
 #include "image_RGB2Gray.hpp"
 #include "riscv_timer.hpp"
 #include "riscv_utils.hpp"
+#include "box_filter.hpp"
