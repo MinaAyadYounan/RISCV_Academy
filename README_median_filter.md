@@ -2,7 +2,12 @@
 
 ---
 
-## 1. gem5 Architectural Benchmark Results (XiangShan KMHV3)
+## 1. Repository & Branch Link
+* **Pull Request:** [Open PR on GitHub](https://github.com/AhmedFathySV/RISCV_Academy/pull/10)
+
+---
+
+## 2. gem5 Architectural Benchmark Results (XiangShan KMHV3)
 
 * **Architecture:** XiangShan NanHu / KMHV3 Out-of-Order Core (RVV 1.0, VLEN=128, LMUL=2)
 
@@ -28,7 +33,7 @@ Full scalar versus vectorized benchmark on 11&times;11 executed within simulator
 
 ---
 
-## 2. Core Optimizations
+## 3. Core Optimizations
 
 * **Algorithm Selection (Separable Sorting Network vs. Histogram):**  
   While histogram-based approaches can be effective for large kernels in scalar implementations, they perform poorly on vector hardware. Indexed memory access (gather/scatter) requires multiple cycles, and cross-lane data dependencies cause significant pipeline stalls. In contrast, 2D separable sorting networks provide deterministic execution and continuous vector memory access, making them far better suited for vector processors.
@@ -39,6 +44,6 @@ Full scalar versus vectorized benchmark on 11&times;11 executed within simulator
 
 ---
 
-## 3. Verification
+## 4. Verification
 
 All unit tests in `test/unit_test/source/median_filter_test.cpp` pass cleanly (**120/120 tests**) under `qemu-riscv64`.
