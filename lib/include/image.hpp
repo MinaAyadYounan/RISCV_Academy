@@ -4,11 +4,19 @@
 #include "types.hpp"
 #include <cstddef>
 #include <cstdint>
+#include <algorithm>
 
 enum class ImageType
 {
     GRAY,
     RGB,
+};
+
+enum class PaddingType
+{
+    CONSTANT,
+    REPLICA,
+    REFLECT,
 };
 
 template <typename T, ImageType Type = ImageType::GRAY>
@@ -103,6 +111,40 @@ public:
     const T* GetPtr(const int x, const int y) const
     {
         return data + index(x, y);
+    }
+    template <PaddingType Padding = PaddingType::REPLICA>
+    const T* GetRowPtr(int y) const
+    {
+        if constexpr (Padding == PaddingType::REPLICA)
+        {
+            int cy = std::clamp(y, 0, height - 1);
+            return data + cy * stride;
+        }
+        else if constexpr (Padding == PaddingType::REFLECT)
+        {
+            int ry = (y < 0) ? -y : (y >= height) ? 2 * height - 2 - y : y;
+            ry = std::clamp(ry, 0, height - 1);
+            return data + ry * stride;
+        }
+        else if constexpr (Padding == PaddingType::CONSTANT)
+        {
+            if (y >= 0 && y < height)
+            {
+                return data + y * stride;
+            }
+            return nullptr;
+        }
+    }
+
+    const T* GetRowPtr(int y, PaddingType padding) const
+    {
+        switch (padding)
+        {
+        case PaddingType::REPLICA:  return GetRowPtr<PaddingType::REPLICA>(y);
+        case PaddingType::REFLECT:  return GetRowPtr<PaddingType::REFLECT>(y);
+        case PaddingType::CONSTANT: return GetRowPtr<PaddingType::CONSTANT>(y);
+        }
+        return GetRowPtr<PaddingType::REPLICA>(y);
     }
 
 #ifdef RISCV_QEMU
